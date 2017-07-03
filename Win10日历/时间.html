@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>win10日历</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    a {
+      text-decoration: none;
+      color: #fff;
+    }
+    .calendar {
+      width: 460px;
+      margin: 15px auto 0;
+      background: rgba(0, 0, 0, 0.5);
+      padding-bottom: 20px;
+      height:581px
+    }
+    
+    
+    .date-time{height:85px;border-bottom:1px solid #000;padding:10px 30px;cursor:default}
+    .date-time span{display:block;color:#fff;font-size:36px;}
+    .date-time .year{color:#4EBCD7;font-size:16px;padding-top:10px;}
+    
+    .date-dates{position: relative;height:413px;overflow:hidden;}
+    .date-arrow{height:55px;line-height:55px;padding:0 28px;color:#fff;font-size:17px;overflow:hidden;cursor:default;}
+    .date-arrow .arrow-right{float:right;height:25px;margin-top:15px;line-height:25px;border-radius:5px;width:107px;overflow:hidden;}
+    .date-arrow .arrow-right a{float:left;padding:0 9px;background:#fff;color:#000;font-size:14px;}
+    .date-arrow .arrow-right a:nth-of-type(2){border-left:1px solid #ccc;border-right:1px solid #ccc;padding:0 10px;}
+    
+    .date-days,.date-nums{width:100%;justify-content:center;align-items:center;display: flex;}
+    .date-dates span{width:60px;height:55px;border:2px solid rgba(0, 0, 0, 0);text-align:center;line-height:55px;color:#fff;cursor: default;display:inline-block;}
+    .date-dates .date-nums span:hover{border-color:rgba(255, 255, 255, 1)}
+    .date-nums{height:auto;flex-wrap: wrap;overflow:hidden;}
+    .current-day{background:skyblue;}
+    .date-aa{text-align:center;position:relative;}
+  </style>
+</head>
+<body>
+  <div class="calendar">
+  	<div class="date-time">
+  		<span class="time">00：00：00</span>
+  		<span class="year">xxxx年x月x日</span>
+  	</div>
+  	<div class="date-arrow">
+  		<span class="arrow-left">xxxx年x月</span>
+  		<div class="arrow-right">
+  			<a href="javascript:;" class="prev"><</a>
+				<a href="javascript:;" class="to-day">今天</a>
+  			<a href="javascript:;" class="next">></a>
+  		</div>
+  	</div>
+		<div class="date-dates">
+			<div class="date-days">
+				<span>一</span>
+				<span>二</span>
+				<span>三</span>
+				<span>四</span>
+				<span>五</span>
+				<span>六</span>
+				<span>日</span>
+			</div>
+			<div class="date-nums">
+				<div class="date-aa"></div>
+				<div class="date-aa"></div>
+			</div>
+		</div>
+  </div>
+  <script src="tool.js"></script>
+  
+  <script>
+  	
+  	var timeHtml = document.querySelector(".time");
+  	var yearHtml = document.querySelector(".year");  	
+  	var arrowLeft = document.querySelector(".arrow-left");  	
+  	var dateNums = document.querySelectorAll(".date-nums .date-aa");
+  	
+  	//生成前面的时间
+  	
+		
+		var prev = document.querySelector(".prev");  	
+  	var next = document.querySelector(".next");
+  	var toDay = document.querySelector(".to-day");
+  	
+  	var data = 0;
+  	var n = 0;
+  	
+  	prev.onclick = function(){
+  		data = currentDay(--n);
+  		
+  		for(var i=0; i<dateNums.length; i++){
+  				Fq.css(dateNums[i], 'top', -354);
+  				Fq.animation(dateNums[i],{top: 0}, 350)
+  				dateNums[i].innerHTML = data.dateStr;
+  		}
+  		
+  		arrowLeft.innerHTML = `${data.newY}年${data.newM}月`; 	    
+  	}
+  	
+  	
+  	next.onclick = function(){
+  		data = currentDay(++n);			
+  		for(var i=0; i<dateNums.length; i++){
+  				Fq.css(dateNums[i], 'top', 55);
+  				Fq.animation(dateNums[i],{top: -354}, 350)
+  				dateNums[i].innerHTML = data.dateStr;
+  		}
+  		arrowLeft.innerHTML = `${data.newY}年${data.newM}月`;
+  	}
+  	
+  	toDay.onclick = function(){
+  		n = 0;
+			data = currentDay(n);
+			for(var i=0; i<dateNums.length; i++){
+  				dateNums[i].innerHTML = data.dateStr;
+  		}	  	
+	    arrowLeft.innerHTML = `${data.newY}年${data.newM}月`;	    
+  	}
+		
+		
+  	//生成后面日期的函数
+  	
+  	
+  	var data = currentDay(0);
+  	
+  		
+  	for(var i = 0; i<dateNums.length; i++){
+	  		dateNums[i].innerHTML = data.dateStr;
+  	}
+  	
+    arrowLeft.innerHTML = `${data.newY}年${data.newM}月`; 	    
+    
+    yearHtml.innerHTML = `${data.newY}年${data.newM}月${data.newD}日`;
+	 	
+  	function currentDay(n){  		
+
+  		var newDate = new Date();
+  		
+  		var flagDate = new Date();
+  		var flagY = flagDate.getFullYear();
+  		var flagM = flagDate.getMonth() + 1;
+  		var flagD = flagDate.getDate();
+  		
+  		newDate.setMonth( newDate.getMonth() + n );
+
+  		var newY = newDate.getFullYear();
+  		var newM = newDate.getMonth() + 1;
+  		var newD = newDate.getDate();
+
+		   // 设置到当月的1号
+      newDate.setDate(1);
+      
+      // 拿到当月的1号是星期几
+      var prevMonthIndex = newDate.getDay();
+      
+      // 获取到1号前面空了多少个各自，正好是1号对应的星期数- 1
+      prevMonthIndex = prevMonthIndex === 0 ? 6 : --prevMonthIndex;
+      
+      // 设置到下个月
+      newDate.setMonth(newDate.getMonth() + 1);
+      
+      // 设置下个月的日期为0，获取到当月有多少天
+      newDate.setDate(0);
+      
+      // 获取当月有多少天
+      var currentMonthDates = newDate.getDate();
+      
+      // 设置到上一个的最后一天
+      newDate.setDate(0);
+      
+      // 获取到上个月的最后一天是几号，就拿到上个月有多少天了
+      var prevMonthDates = newDate.getDate();
+			
+			var str = '';			
+			
+			var cls = '';
+      // 生成上个月剩余的要显示的天数
+      for(var i = prevMonthIndex - 1; i>=0; i--){
+        str += `<span style="color:#ccc">${prevMonthDates - i}</span>`;
+      }
+      
+      // 生成当月的日期数
+      var cls = '';
+      for(var i=1; i<=currentMonthDates; i++){
+        if(i === newD && newY === flagY && newM === flagM){
+          cls = 'current-day'
+        }else{
+          cls = '';
+        }
+        str += `<span class="${cls}">${i}</span>`;
+      }
+
+      
+      for(var i=1; i<=42 -currentMonthDates - prevMonthIndex; i++){
+        str += `<span style="color:#ccc">${i}</span>`;
+      }
+      
+
+			
+			 return {dateStr: str, newY: newY, newM: newM, newD: newD};
+  		
+  	}
+  	
+  	
+  	function getTime(){
+			var now = new Date();
+			var year = now.getFullYear(), month = now.getMonth() +1, date = now.getDate();
+			var hours = now.getHours(), minutes = now.getMinutes(), seconds = now.getSeconds();
+			
+			timeHtml.innerHTML = `${add0(hours)} : ${add0(minutes)} : ${add0(seconds)}`;
+		}
+		getTime()
+		setInterval(getTime, 500);
+	  	
+		function add0(num){
+			return num < 10 ? '0' + num : '' + num;
+		}  
+  </script>
+  
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>放大镜</title>
+  <style>
+    .enlarge {
+      width: 450px;
+      height: 450px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-image: url(enlarge.jpg);
+      border: 1px solid rgba(161, 161, 161, 0.62);
+    }
+    .enlarge-layer{
+      width: 304px;
+      height: 304px;
+      position: absolute;
+      background: #FEDE4F;
+      opacity: .5;
+      border: 1px solid #aaa;
+      display: none;
+      cursor: move
+    }
+    .enlarge-img{
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      left: calc(100% + 1px);
+      top: -1px;
+      border: 1px solid rgba(161, 161, 161, 0.62);
+      background-image: url(big.jpg);
+      background-size: 800px 800px;
+      background-repeat: no-repeat;
+      display: none;
+    }
+    .enlarge:hover .enlarge-img,
+    .enlarge:hover .enlarge-layer {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="enlarge">
+    <div class="enlarge-img"></div>
+    <div class="enlarge-layer"></div>
+  </div>
+
+  <script>
+    var enLarge = document.querySelector('.enlarge');
+    var enLargeLayer = document.querySelector('.enlarge-layer');
+    var enlargeImg = document.querySelector('.enlarge-img');
+
+
+    var scale = 0.7 / 1;
+    var bigimgSize = 800;
+
+    enlargeImg.style.width = enlargeImg.style.height = bigimgSize * scale + 'px';
+
+    enLarge.addEventListener('mousemove', function(e){
+
+      var X = e.pageX, Y = e.pageY, L, T, w = this.clientWidth / 2, max = this.clientHeight - enLargeLayer.offsetHeight, scaleX, sacleY;
+
+      L = X - w;
+      T = Y - w;
+
+      if(L <= 0) L = 0;
+      if(T <= 0) T = 0;
+      if(L >= max) L = max;
+      if(T >= max) T = max;
+
+      scaleX = L / max;
+      scaleY = T / max;
+
+      enLargeLayer.style.left = L + 'px';
+      enLargeLayer.style.top = T + 'px';
+
+      enlargeImg.style.backgroundPosition = `${-(bigimgSize*(1 - scale))*scaleX}px ${-(bigimgSize*(1 - scale))*scaleY}px`;
+
+    })
+
+
+
+
+  </script>
+
+
+
+
+</body>
+</html>
