@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 200px;
+      height: 300px;
+      overflow: hidden;
+      border:1px solid #A3A3A3;
+      left: calc(50% - 100px);
+      position: absolute;
+      top: calc(50% - 150px);
+      background: #F3F3F3
+    }
+    .container ul {
+      width: calc(100% - 20px);
+      position: absolute;
+      left: 5px;
+      top: 0;
+      word-break: break-all;
+    }
+    .scroll-wrap {
+      width: 20px;
+      height: 300px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      border-left: 1px solid #A3A3A3;
+      background: #F1F1F1
+    }
+    .scroll {
+      width: 100%;
+      height: 150px;
+      background: #C1C1C1;
+      /*border-radius: 10px;*/
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .scroll:hover {
+      background: #A9A9A9
+    }
+    .scroll-wrap button{
+      position: absolute;
+      top: 0;
+      left:0;
+      width: 100%;
+      height: 20px;
+      transform: rotate(270deg);
+    }
+    .scroll-wrap button:nth-of-type(2){
+      top: auto;
+      bottom:0;
+      transform: rotate(90deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <ul class="SIR-list">
+
+    </ul>
+    <div class="scroll-wrap">
+      <div class="scroll"></div>
+      <!-- <button class="btn1">></button>
+      <button class="btn2">></button> -->
+    </div>
+  </div>
+  <script>
+    var wrap = document.querySelector('.scroll-wrap');
+    var scroll = document.querySelector('.scroll');
+
+    var siRList = document.querySelector('.SIR-list');
+    var container = document.querySelector('.container');
+
+    var str = ``;
+
+    for (var i = 0; i < 100; i++) {
+      str += `<li>Mr. 张${i+1}</li>`;
+    }
+    siRList.innerHTML = str;
+
+
+    var sirScrollMax = container.scrollHeight; // 609
+    var sirMax = container.clientHeight; // 300
+    var sirH = sirScrollMax - sirMax; // 309
+
+    var scale = Math.min((sirMax / sirScrollMax), 1)
+    scroll.style.height = wrap.clientHeight * scale + 'px';
+
+    var max = wrap.clientHeight - scroll.offsetHeight, scaleY;
+
+    scroll.addEventListener('mousedown', function(e){
+      e.preventDefault();
+      var dis = e.pageY - this.offsetTop;
+
+      document.onmousemove = function (e){
+        var T = e.pageY - dis;
+
+        if(T <= 0) T = 0;
+        if(T >= max) T = max;
+        scaleY = T / max;
+
+        scroll.style.top = T + 'px';
+        siRList.style.top = -sirH * scaleY + 'px'
+      }
+
+      document.onmouseup = function (e){
+        this.onmousemove = this.onmouseup = null;
+      }
+    })
+
+    var speed = (wrap.clientHeight - scroll.offsetHeight) / 10;
+
+    // var btns = document.querySelectorAll('button');
+
+    // btns[0].onclick = function () {
+    //   scroll.style.top = scroll.offsetTop >= speed ? scroll.offsetTop - speed + 'px' : 20 + 'px';
+    //   scaleY = scroll.offsetTop / max;
+    //   siRList.style.top = -sirH * scaleY + 'px';
+    // }
+    // btns[1].onclick = function () {
+    //   scroll.style.top = scroll.offsetTop <= wrap.clientHeight - scroll.offsetHeight - speed ? scroll.offsetTop + speed + 'px' : wrap.clientHeight - scroll.offsetHeight + 'px';
+    //   scaleY = scroll.offsetTop / max;
+    //   siRList.style.top = -sirH * scaleY + 'px';
+    // }
+
+    mouseWheel(document, function(){
+      scroll.style.top = scroll.offsetTop >= speed ? scroll.offsetTop - speed + 'px' : 0;
+
+      scaleY = scroll.offsetTop / max;
+      siRList.style.top = -sirH * scaleY + 'px';
+
+    }, function(){
+      scroll.style.top = scroll.offsetTop <= wrap.clientHeight - scroll.offsetHeight - speed ? scroll.offsetTop + speed + 'px' : wrap.clientHeight - scroll.offsetHeight + 'px';
+
+      scaleY = scroll.offsetTop / max;
+      siRList.style.top = -sirH * scaleY + 'px';
+    });
+
+    function mouseWheel(ele, fnUp, fnMove){
+      if(window.navigator.userAgent.indexOf('firefox') != -1){
+        ele.addEventListener('DOMMouseScroll', fn1)
+      }else{
+        ele.addEventListener('mousewheel', fn1)
+      }
+
+      function fn1(e) {
+        var dis;
+
+        if(e.detail){
+          dir = e.detail > 0 ? false : true;
+        }
+        if(e.wheelDelta){
+          dir = e.wheelDelta > 0 ? true : false;
+        }
+
+        if(dir){
+          fnUp && fnUp.call(ele);
+        }else{
+          fnMove && fnMove.call(ele);
+        }
+      }
+
+    }
+  </script>
+</body>
+</html>
