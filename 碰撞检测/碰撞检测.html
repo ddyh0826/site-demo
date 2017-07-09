@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+  <style>
+    .box1 {
+      width: 200px;
+      height: 200px;
+      background: rgb(97, 212, 58);
+      position: absolute;
+      left: calc(50% - 100px);
+      top: calc(50% - 100px);
+    }
+    .box2 {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      width: 140px;
+      height: 140px;
+      background: rgb(48, 143, 184);
+    }
+  </style>
+</head>
+<body>
+  <div class="box1"></div>
+  <div class="box2"></div>
+  <script>
+    var box1 = document.querySelector('.box1');
+    var box2 = document.querySelector('.box2');
+
+
+    box2.onmousedown = function (e){
+      e.preventDefault();
+
+      var disX = e.pageX - this.offsetLeft;
+      var disY = e.pageY - this.offsetTop;
+
+      document.onmousemove = function (e){
+        var x = e.pageX, y = e.pageY;
+        var L = x - disX, T = y - disY;
+
+        // duang(box2, box1)  === > true ===> 证明碰上了
+
+        // console.log(duang(box2, box1));
+
+        if(duang(box2, box1)){
+          box1.style.background = 'rgb(150, 39, 94)';
+        }else{
+          box1.style.background = '';
+        }
+
+        box2.style.left = L + 'px';
+        box2.style.top = T + 'px';
+      };
+      document.onmouseup = function (){
+        this.onmouseup = this.onmousemove = null;
+      };
+    };
+
+
+    function duang(current, target){
+      var currentRect = current.getBoundingClientRect(),
+          targetRect = target.getBoundingClientRect();
+
+      // 拿到当前拖拽元素四个边距离文档左侧和上侧的绝对距离
+      var currentL = currentRect.left,
+          currentT = currentRect.top,
+          currentR = currentRect.right,
+          currentB = currentRect.bottom;
+
+      var targetL = targetRect.left,
+          targetT = targetRect.top,
+          targetR = targetRect.right,
+          targetB = targetRect.bottom;
+
+      return currentR >= targetL && currentB >= targetT && currentL <= targetR && currentT <= targetB;
+    }
+
+
+
+
+
+  </script>
+</body>
+</html>
