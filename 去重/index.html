@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>js去除数组重复项以及js移除json里面的重复项的方法</title>
+<meta charset="UTF-8">
+<meta name="author" content="yanue" />
+<meta name="copyright" content="www.yanue.net" />
+</head>
+<body>
+<script type="text/javascript">
+    var arr=[
+      {"cid": 1, "county": "小河区"},
+      {"cid": 1, "county": "小河区"},
+      {"cid": 2, "county": "南明区"},
+      {"cid": 1, "county": "小河区"},
+      {"cid": 1, "county": "小河区"},
+      {"cid": 3, "county": "乌当区"},
+      {"cid": 1, "county": "小河区"}
+    ];
+    var hash = {};
+    for ( var i = 0; i < arr.length; i++) {
+      (hash[arr[i]] == undefined) && (hash[arr[i]["cid"]+","+arr[i]["county"]]=arr[i]["cid"]+","+arr[i]["county"]);
+    }
+    for(var o in hash){
+      cid=o.split(',')[0];
+      county=o.split(',')[1];
+      document.write(cid+" "+county+"<br>");
+    }
+</script>
+</body>
+</html>
