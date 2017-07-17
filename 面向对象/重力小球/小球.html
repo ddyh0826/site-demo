@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+</head>
+<body>
+  <script src="./ball.js"></script>
+  <script>
+    // 继承：就是子构造函数继承父构造函数的所有的属性，子构造函数的原型继承父构造函数原型的所有的方法
+
+    function MoveBall(x, y, r, color){
+      Ball.call(this, x, y, r, color);
+      // Ball.apply(this, arguments); 如果要继承所有的属性
+
+      this.vy = 2;
+      this.g = 0.2;
+
+      return this;
+    }
+
+    // MoveBall.prototype = Ball.prototype;  // 这样会有问题，当修改子构造函数的时候可能会影响父构造函数的原型
+
+    MoveBall.prototype = Object.create(Ball.prototype);
+
+    MoveBall.prototype.constructor = MoveBall;
+
+    // MoveBall.prototype.draw = function(){};
+
+
+    MoveBall.prototype.move = function (){
+      var _this = this;
+      (function fn(){
+        window.requestAnimationFrame(fn);
+
+        _this.ball.style.top = _this.ball.offsetTop + _this.vy + 'px';
+        _this.vy += _this.g;
+
+        if(_this.ball.offsetTop >= window.innerHeight - _this.ball.offsetWidth){
+          _this.ball.style.top = window.innerHeight - _this.ball.offsetWidth + 'px';
+          _this.vy *= -0.7;
+        }
+
+      })();
+      return this;
+    };
+
+    var b = new MoveBall(100, 100, 50, 'blue').init().move();
+
+    // b.__proto__.a = 1;
+
+    console.log(b);
+
+    console.log(b.constructor);  // 不对了
+
+  </script>
+</body>
+</html>
