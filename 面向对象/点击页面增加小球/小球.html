@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title></title>
+</head>
+<body>
+  <script>
+    function Ball(x, y, r, color){
+      this.ball = null;
+      this.x = x;
+      this.y = y;
+      this.r = r;
+      this.color = color;
+      return this;
+    }
+    
+    Ball.prototype.init = function (){
+      this.ball = document.createElement('div');
+      this.draw(this.ball);
+      document.body.appendChild(this.ball);
+      return this;
+    };
+    
+    Ball.prototype.draw = function (ball){
+      ball.style.position = 'absolute';
+      ball.style.borderRadius = '50%';
+      ball.style.backgroundColor = this.color;
+      ball.style.width = ball.style.height = this.r * 2 + 'px';
+      ball.style.left = this.x + 'px';
+      ball.style.top = this.y + 'px';
+      return this;
+    };
+    
+    document.onclick = function (){
+      var x = Math.random() * 0.8 * window.innerWidth + 0.1 * window.innerWidth;
+      var y = Math.random() * 0.75 * window.innerHeight + 0.1 * window.innerHeight;;
+      var ball = new Ball(x, y, 50, 'red').init();
+    };
+
+    
+  </script>
+</body>
+</html>
