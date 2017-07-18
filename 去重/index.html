@@ -26,6 +26,9 @@
       county=o.split(',')[1];
       document.write(cid+" "+county+"<br>");
     }
+    // 数组去重
+    var arr1 = [1, 2, 4, 1, 2, 1, true, true, false, true, function(){}, 1, 'c', 'b', 'c', 'a', 'a'];
+    alert([...new Set(arr1)])
 </script>
 </body>
 </html>
